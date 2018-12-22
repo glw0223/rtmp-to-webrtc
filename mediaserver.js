@@ -23,7 +23,14 @@ const audioCodec = 'opus';
 let videoPort = null;
 let audioPort = null;
 
-const RTMP_TO_RTP = "gst-launch-1.0 -v  rtmpsrc location=rtmp://localhost/live/{stream} ! flvdemux ! h264parse ! rtph264pay config-interval=-1 pt={pt} !  udpsink host=127.0.0.1 port={port}"
+//const RTMP_TO_RTP = "gst-launch-1.0 -v  rtmpsrc location=rtmp://localhost/live/{stream} ! flvdemux ! h264parse ! rtph264pay config-interval=-1 pt={pt} !  udpsink host=127.0.0.1 port={port}"
+
+const RTMP_TO_RTP = "gst-launch-1.0 -v  filesrc location=/Users/gaoliwen/Downloads/ffmpeg-4.0.3/test.264.264.flv ! flvdemux ! h264parse ! rtph264pay config-interval=-1 pt={pt} !  udpsink host=127.0.0.1 port={port} --gst-debug-level=2"
+
+//const RTMP_TO_RTP = "/Users/gaoliwen/Downloads/ffmpeg-4.0.3/ffmpeg -re -stream_loop -1 -i /Users/gaoliwen/Downloads/ffmpeg-4.0.3/test.264.264.flv -an -vcodec copy -f h264 udp://localhost:{port}"
+
+//const RTMP_TO_RTP = "ffmpeg -y -i rtmp://localhost/live/live -an -vcodec copy -f h264 udp://localhost:{port}"
+
 
 class MediaServer 
 {
@@ -102,7 +109,9 @@ class MediaServer
             audio:audioSession
         });
 
-        let rtmp_to_rtp = format(RTMP_TO_RTP, {stream:streamName, pt: videoPt, port: videoPort});
+        //let rtmp_to_rtp = format(RTMP_TO_RTP, {stream:streamName, pt: videoPt, port: videoPort});
+        let rtmp_to_rtp = format(RTMP_TO_RTP, {pt: videoPt, port: videoPort});
+        //let rtmp_to_rtp = format(RTMP_TO_RTP, {port: videoPort});
 
         console.log('rtmp_to_rtp ', rtmp_to_rtp);
 
